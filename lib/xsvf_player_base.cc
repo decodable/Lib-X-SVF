@@ -63,25 +63,22 @@ namespace codible
   }
 
   XSVF_Player_Base::XSVF_Player_Base(XSVF_Host &h) {
-    host.udelay = h_udelay;
-    host.setup = h_setup;
-    host.shutdown = h_shutdown;
-    host.sync = h_sync;
-    host.getbyte = h_getbyte;
-    host.pulse_tck = h_pulse_tck;
-    host.pulse_sck = h_pulse_sck;
-    host.set_trst = h_set_trst;
-    host.set_frequency = h_set_frequency;
-    host.report_tapstate = h_report_tapstate;
-    host.report_device = h_report_device;
-    host.report_status = h_report_status;
-    host.report_error = h_report_error;
-    host.realloc = h_realloc;
-    host.user_data = &h;
-  }
-
-  int XSVF_Player_Base::play() {
-    return do_play();
+    host_.udelay = h_udelay;
+    host_.setup = h_setup;
+    host_.shutdown = h_shutdown;
+    host_.sync = h_sync;
+    host_.getbyte = h_getbyte;
+    host_.pulse_tck = h_pulse_tck;
+    host_.pulse_sck = h_pulse_sck;
+    host_.set_trst = h_set_trst;
+    host_.set_frequency = h_set_frequency;
+    host_.report_tapstate = h_report_tapstate;
+    host_.report_device = h_report_device;
+    host_.report_status = h_report_status;
+    host_.report_error = h_report_error;
+    host_.realloc = h_realloc;
+    host_.user_data = &h;
+    host_.tap_state = LIBXSVF_TAP_INIT;
   }
 }
 

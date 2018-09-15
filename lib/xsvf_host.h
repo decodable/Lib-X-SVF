@@ -24,6 +24,8 @@ namespace codible
     virtual void report_status(const char *message) = 0;
     virtual void report_error(const char *file, int line, const char *message) = 0;
     virtual void *realloc(void *ptr, int size, enum libxsvf_mem which) = 0;
+
+    virtual ~XSVF_Host() {}
   };
 } // namespace codible
 

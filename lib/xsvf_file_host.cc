@@ -4,16 +4,8 @@
 
 namespace codible
 {
-  XSVF_File_Host::XSVF_File_Host(const std::string &filename) 
-    : XSVF_File_Host(std::ifstream(filename)) {
-  }
-
-  XSVF_File_Host::XSVF_File_Host(std::istream &&stream)
-    : XSVF_File_Host(stream) {
-  }
-
   XSVF_File_Host::XSVF_File_Host(std::istream &stream) 
-    : p_stream(&stream) {
+    : stream_(stream) {
   }
 
   int XSVF_File_Host::setup() {
@@ -29,7 +21,7 @@ namespace codible
   }
 
   int XSVF_File_Host::getbyte() {
-    return p_stream->get();
+    return stream_.get();
   }
 
   void *XSVF_File_Host::realloc(void *ptr, int size, enum libxsvf_mem which) {

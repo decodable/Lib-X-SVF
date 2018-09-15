@@ -9,14 +9,14 @@ namespace codible
   {
   public:
     XSVF_Player(XSVF_Host &h);
-    virtual int do_play();
+    virtual int play();
   };
 
   class SVF_Player : public XSVF_Player_Base
   {
   public:
     SVF_Player(XSVF_Host &h);
-    virtual int do_play();
+    virtual int play();
   };
 
 } // namespace codible

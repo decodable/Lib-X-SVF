@@ -3,14 +3,12 @@
 
 #include "xsvf_host.h"
 #include <istream>
-#include <string>
 
 namespace codible
 {
   class XSVF_File_Host : public XSVF_Host
   {
   public:
-    XSVF_File_Host(const std::string &filename);
     XSVF_File_Host(std::istream &&stream);
     XSVF_File_Host(std::istream &stream);
 
@@ -23,7 +21,7 @@ namespace codible
     virtual void report_status(const char *message);
 
   private:
-    std::istream *p_stream;
+    std::istream &stream_;
   };
 } // namespace codible
 

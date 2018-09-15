@@ -15,12 +15,12 @@ namespace codible
   public:
     XSVF_Player_Base(XSVF_Host &h);
 
-    int play();
+    virtual int play() = 0;
+
+    virtual ~XSVF_Player_Base() {}
 
   protected:
-    virtual int do_play() = 0;
-
-    libxsvf_host host;
+    libxsvf_host host_;
   };
 } // codible
 

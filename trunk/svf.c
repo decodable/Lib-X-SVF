@@ -134,6 +134,56 @@ static int token2tapstate(const char *str1)
 	return -1;
 }
 
+static double token2double(const char *str1)
+{
+  double number = 0;
+  int got_decimal_point = 0;
+  int decimal_digits = 0;
+  int exp = 0;
+  const char *p = str1;
+  int i = 0;
+
+  if (*p < '0' || *p > '9')
+    return -1;
+  while ((*p >= '0' && *p <= '9') || (*p == '.')) {
+    if (*p == '.') {
+      got_decimal_point = 1;
+    } else {
+      if (got_decimal_point)
+        decimal_digits++;
+      number = number*10 + (*p - '0');
+    }
+    p++;
+  }
+  int exp_sign = 1;
+  if(*p == 'E' || *p == 'e') {
+    p++;
+    if (*p == '+') {
+      p++;
+    } else if (*p == '-') {
+      exp_sign = -1;
+      p++;
+    }
+    while (*p >= '0' && *p <= '9') {
+      exp = exp*10 + (*p - '0');
+      p++;
+    }
+  }
+
+  exp *= exp_sign;
+  exp -= decimal_digits;
+  while (exp < 0) {
+    number /= 10;
+    exp++;
+  }
+  while (exp > 0) {
+    number *= 10;
+    exp--;
+  }
+
+  return number;
+}
+
 struct bitdata_s {
 	int len, alloced_len;
 	int alloced_bytes;
@@ -373,40 +423,12 @@ int libxsvf_svf(struct libxsvf_host *h)
 		}
 
 		if (!strtokencmp(p, "FREQUENCY")) {
-			unsigned long number = 0;
-			int got_decimal_point = 0;
-			int decimal_digits = 0;
-			int exp = 0;
+      p += strtokenskip(p);
+      double number = token2double(p);
+      if (number < 1) {
+        goto syntax_error;
+      }
 			p += strtokenskip(p);
-			if (*p < '0' || *p > '9')
-				goto syntax_error;
-			while ((*p >= '0' && *p <= '9') || (*p == '.')) {
-				if (*p == '.') {
-					got_decimal_point = 1;
-				} else {
-					if (got_decimal_point)
-						decimal_digits++;
-					number = number*10 + (*p - '0');
-				}
-				p++;
-			}
-			if(*p == 'E' || *p == 'e') {
-				p++;
-				if (*p == '+')
-					p++;
-				while (*p >= '0' && *p <= '9') {
-					exp = exp*10 + (*p - '0');
-					p++;
-				}
-				exp -= decimal_digits;
-				if (exp < 0)
-					goto syntax_error;
-				for(i=0; i<exp; i++)
-					number *= 10;
-			}
-			while (*p == ' ') {
-				p++;
-			}
 			p += strtokenskip(p);
 			if (LIBXSVF_HOST_SET_FREQUENCY(number) < 0) {
 				LIBXSVF_HOST_REPORT_ERROR("FREQUENCY command failed!");
@@ -461,50 +483,12 @@ int libxsvf_svf(struct libxsvf_host *h)
 						state_run = st;
 					continue;
 				}
-				if (*p < '0' || *p > '9')
-					goto syntax_error;
-				int number = 0;
-				int exp = 0, expsign = 1;
-				int number_e6, exp_e6;
-				while (*p >= '0' && *p <= '9') {
-					number = number*10 + (*p - '0');
-					p++;
-				}
-				if(*p == 'E' || *p == 'e') {
-					p++;
-					if(*p == '-') {
-						expsign = -1;
-						p++;
-					}
-					while (*p >= '0' && *p <= '9') {
-						exp = exp*10 + (*p - '0');
-						p++;
-					}
-					exp = exp * expsign;
-					number_e6 = number;
-					exp_e6 = exp + 6;
-					while (exp < 0) {
-						number /= 10;
-						exp++;
-					}
-					while (exp > 0) {
-						number *= 10;
-						exp--;
-					}
-					while (exp_e6 < 0) {
-						number_e6 /= 10;
-						exp_e6++;
-					}
-					while (exp_e6 > 0) {
-						number_e6 *= 10;
-						exp_e6--;
-					}
-				} else {
-					number_e6 = number * 1000000;
-				}
-				while (*p == ' ') {
-					p++;
-				}
+        double number = token2double(p);
+        if (number < 0) {
+          goto syntax_error;
+        }
+        double number_e6 = number * 1000000;
+        p += strtokenskip(p);
 				if (!strtokencmp(p, "SEC")) {
 					p += strtokenskip(p);
 					if (got_maximum)
