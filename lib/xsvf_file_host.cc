@@ -25,6 +25,13 @@ namespace codible
   }
 
   void *XSVF_File_Host::realloc(void *ptr, int size, enum libxsvf_mem which) {
+    if (0 == size) {
+      if (ptr != NULL) {
+        free(ptr);
+      }
+      return NULL;
+    }
+
     return std::realloc(ptr, size);
   }
 
