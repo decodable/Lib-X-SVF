@@ -14,3 +14,15 @@ Branch _trunk_ keep the original svn trunk from http://svn.clifford.at/libxsvf/t
 ## Docker
 Compiled and tested in the docker [ubuntu_cpp_dev](https://hub.docker.com/r/codible/ubuntu_cpp_dev/).
 
+## Build
+```
+git clone git@github.com:decodable/Lib-X-SVF.git
+cd Lib-X-SVF/
+mkdir build
+cd build
+cmake ..
+make
+make test
+ctest -T memcheck
+```
+
