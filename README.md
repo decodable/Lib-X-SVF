@@ -26,3 +26,8 @@ ctest -T memcheck
 ## Docker
 Compiled and tested in the docker [ubuntu_cpp_dev](https://hub.docker.com/r/codible/ubuntu_cpp_dev/).
 
+## References
+1. [SVF and XSVF File Formats for Xilinx Devices](https://www.xilinx.com/support/documentation/application_notes/xapp503.pdf)
+2. [Serial Vector Format Specification](http://www.jtagtest.com/pdf/svf_specification.pdf)
+3. [SPI Configuration and Flash Programming in UltraScale FPGAs](https://www.xilinx.com/support/documentation/application_notes/xapp1233-spi-config-ultrascale.pdf)
+
